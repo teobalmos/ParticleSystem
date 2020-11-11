@@ -2,8 +2,7 @@
 class Particle
 {
 private:
-	// float because double takes double the space
-	float x, y, z;
+	int x, y, z;
 
 public:
 
@@ -18,13 +17,13 @@ public:
 		y += 5;
 	}
 
-	float getX() {
+	int getX() {
 		return x;
 	}
-	float getY() {
+	int getY() {
 		return y;
 	}
-	float getZ() {
+	int getZ() {
 		return z;
 	}
 };

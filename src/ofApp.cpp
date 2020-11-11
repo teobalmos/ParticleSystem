@@ -17,7 +17,9 @@ void ofApp::draw(){
 
 	ofPushMatrix();
 
-	aParticle.Move();
+	if (moving) {
+		aParticle.Move();
+	}
 
 	ofNoFill();
 	ofDrawSphere(aParticle.getX(), aParticle.getY(), aParticle.getZ(), 64);
@@ -28,7 +30,10 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+	switch (key) {
+	case(32): setup(); moving = false; break;
+	case('0'): moving = !moving; break;
+	}
 }
 
 //--------------------------------------------------------------

@@ -22,5 +22,6 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 
 		Particle aParticle;
+		bool moving = false;
 		
 };
