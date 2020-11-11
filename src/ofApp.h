@@ -21,7 +21,10 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+		void initParticleSystem(int n);
+
 		Particle aParticle;
 		bool moving = false;
+		std::vector<Particle> particleSystem;
 		
 };

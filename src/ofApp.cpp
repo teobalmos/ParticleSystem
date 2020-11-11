@@ -1,8 +1,27 @@
 #include "ofApp.h"
 
+#define RADIUS 100
+#define FPS 30
+#define COUNT 5
+
+void ofApp::initParticleSystem(int n) {
+	particleSystem.clear();
+
+	for (int i = 0; i < n; i++) {
+		double a = ((double)rand() / (RAND_MAX)) * 2 * PI;
+		double r = RADIUS * sqrt(((double)rand() / (RAND_MAX)));
+
+		double x = r * cos(a);
+		double z = r * sin(a);
+
+		particleSystem.push_back(Particle(x, 0, z));
+	}
+}
+
 //--------------------------------------------------------------
 void ofApp::setup(){
-	aParticle = Particle(100, 0, 0);
+	initParticleSystem(COUNT);
+	ofSetFrameRate(FPS);
 }
 
 //--------------------------------------------------------------
@@ -13,19 +32,29 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-	
+	ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2);
+
+	ofDrawCircle(0, 0, RADIUS);
 
 	ofPushMatrix();
 
-	if (moving) {
-		aParticle.Move();
-	}
+	
 
 	ofNoFill();
-	ofDrawSphere(aParticle.getX(), aParticle.getY(), aParticle.getZ(), 64);
+
+	for (int i = 0; i < particleSystem.size(); i++) {
+
+		if (moving) {
+			particleSystem[i].Move(FPS);
+		}
+
+		ofDrawSphere(particleSystem[i].x, particleSystem[i].y, particleSystem[i].z, particleSystem[i].radius);
+	}
+
+	
 
 	ofPopMatrix();
-
+	
 }
 
 //--------------------------------------------------------------
