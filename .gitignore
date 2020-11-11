@@ -1,0 +1,39 @@
+###########################
+# ignore generated binaries
+# but not the data folder
+###########################
+
+bin/*
+bin/data/
+
+#########
+# general
+#########
+
+[Bb]uild/
+[Oo]bj/
+*.o
+[Dd]ebug*/
+[Rr]elease*/
+*.mode*
+*.app/
+*.pyc
+.svn/
+*.log
+
+# Visual Studio
+*.sdf
+*.opensdf
+*.suo
+*.pdb
+*.ilk
+*.aps
+ipch/
+.vs/
+
+
+# Windows
+# Image file caches
+Thumbs.db
+# Folder config file
+Desktop.ini
