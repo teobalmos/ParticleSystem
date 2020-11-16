@@ -22,6 +22,7 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 
 		void initParticleSystem(int n);
+		Particle initParticle();
 
 		Particle aParticle;
 		bool moving = false;

@@ -1,20 +1,24 @@
 #include "ofApp.h"
 
 #define RADIUS 100
-#define FPS 30
-#define COUNT 5
+#define FPS 60
+#define COUNT 15
+
+Particle ofApp::initParticle() {
+	double a = ((double)rand() / (RAND_MAX)) * 2 * PI;
+	double r = RADIUS * sqrt(((double)rand() / (RAND_MAX)));
+
+	double x = r * cos(a);
+	double z = r * sin(a);
+
+	return Particle(x, 0, z);
+}
 
 void ofApp::initParticleSystem(int n) {
 	particleSystem.clear();
 
 	for (int i = 0; i < n; i++) {
-		double a = ((double)rand() / (RAND_MAX)) * 2 * PI;
-		double r = RADIUS * sqrt(((double)rand() / (RAND_MAX)));
-
-		double x = r * cos(a);
-		double z = r * sin(a);
-
-		particleSystem.push_back(Particle(x, 0, z));
+		particleSystem.push_back(initParticle());
 	}
 }
 
@@ -32,17 +36,25 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-	ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2);
+	ofTranslate(ofGetWidth() / 2, 2 * ofGetHeight() / 3);
 
 	ofDrawCircle(0, 0, RADIUS);
 
 	ofPushMatrix();
 
-	
-
 	ofNoFill();
 
 	for (int i = 0; i < particleSystem.size(); i++) {
+		if (particleSystem[i].isDead()) {
+			std::cout << "size: " << particleSystem[i].radius << '\n';
+			std::cout << "height: " << particleSystem[i].y << '\n';
+			// Push all the particles to replace.
+			for (int j = i; j < particleSystem.size() - 1; j++) {
+				particleSystem[j] = particleSystem[j + 1];
+			}
+			// Add a new particle.
+			particleSystem[particleSystem.size() - 1] = initParticle();
+		}
 
 		if (moving) {
 			particleSystem[i].Move(FPS);
