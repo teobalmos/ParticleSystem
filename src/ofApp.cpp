@@ -4,12 +4,20 @@
 #define FPS 60
 #define COUNT 15
 
-Particle ofApp::initParticle() {
-	double a = ((double)rand() / (RAND_MAX)) * 2 * PI;
-	double r = RADIUS * sqrt(((double)rand() / (RAND_MAX)));
+Particle ofApp::initParticle(int pop_x, int pop_y, int pop_z) {
+	double x, z;
 
-	double x = r * cos(a);
-	double z = r * sin(a);
+	if (pop_x != 0) {
+		return Particle(pop_x, pop_y, pop_z, /*type=*/ Particle::BubbleType::popped);
+	}
+	else {
+		double a = ((double)rand() / (RAND_MAX)) * 2 * PI;
+		double r = RADIUS * sqrt(((double)rand() / (RAND_MAX)));
+
+		x = r * cos(a);
+		z = r * sin(a);
+	}
+	
 
 	return Particle(x, 0, z);
 }
@@ -36,7 +44,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-	ofTranslate(ofGetWidth() / 2, 2 * ofGetHeight() / 3);
+	ofTranslate(ofGetWidth() / (float)2, 2 * ofGetHeight() / (float)3);
 
 	ofDrawCircle(0, 0, RADIUS);
 
@@ -46,25 +54,38 @@ void ofApp::draw(){
 
 	for (int i = 0; i < particleSystem.size(); i++) {
 		if (particleSystem[i].isDead()) {
-			std::cout << "size: " << particleSystem[i].radius << '\n';
-			std::cout << "height: " << particleSystem[i].y << '\n';
-			// Push all the particles to replace.
-			for (int j = i; j < particleSystem.size() - 1; j++) {
-				particleSystem[j] = particleSystem[j + 1];
+			if (particleSystem[i].type != Particle::popped) {
+				// Push all the particles to replace it.
+				for (int j = i; j < particleSystem.size() - 1; j++) {
+					particleSystem[j] = particleSystem[j + 1];
+				}
+
+				// Add a new particle.
+				particleSystem[particleSystem.size() - 1] = initParticle();
+
+				// Create the bubbles that pop from it.
+				particleSystem.push_back(initParticle(/*popped=*/ true));
+
 			}
-			// Add a new particle.
-			particleSystem[particleSystem.size() - 1] = initParticle();
+			else {
+				// If the particle is a popped bubble, just remove it without replacing it.
+				for (int j = i; j < particleSystem.size() - 1; j++) {
+					particleSystem[j] = particleSystem[j + 1];
+				}
+				particleSystem.pop_back();
+			}			
+			
 		}
+		else {
 
-		if (moving) {
-			particleSystem[i].Move(FPS);
+			if (moving) {
+				particleSystem[i].Move(FPS);
+				particleSystem[i].Breathe();
+			}
+
+			ofDrawSphere(particleSystem[i].x, particleSystem[i].y, particleSystem[i].z, particleSystem[i].radius);
 		}
-
-		ofDrawSphere(particleSystem[i].x, particleSystem[i].y, particleSystem[i].z, particleSystem[i].radius);
 	}
-
-	
-
 	ofPopMatrix();
 	
 }
