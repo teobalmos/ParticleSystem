@@ -14,7 +14,7 @@ void Particle::Move(int fps) {
 	}
 	else {
 
-		float omega = PI / fps;
+		float omega = PI / fps * rotation_modifier;
 
 		float x1, z1;
 

@@ -13,7 +13,7 @@ public:
 	float theta;
 	float speed;
 	float maxHeight;
-	int breathe_modifier;
+	int breathe_modifier, rotation_modifier;
 
 	Particle() = default;
 
@@ -45,6 +45,8 @@ public:
 			// The breathe_modifier will change wether a bubble increases
 			// or decreases in size.
 			breathe_modifier = rand() % 2 == 0 ? -1 : 1;
+
+			rotation_modifier = rand() % 2 == 0 ? -1 : 1;
 
 			// The size of the bubble determines its characteristics.
 			// There are three types of bubble motions.

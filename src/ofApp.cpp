@@ -1,7 +1,7 @@
 #include "ofApp.h"
 
 #define RADIUS 100
-#define FPS 60
+#define FPS 45
 #define COUNT 15
 
 Particle ofApp::initParticle(int pop_x, int pop_y, int pop_z) {
@@ -38,20 +38,6 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::draw(){
-
-	ofTranslate(ofGetWidth() / (float)2, 2 * ofGetHeight() / (float)3);
-
-	ofDrawCircle(0, 0, RADIUS);
-
-	ofPushMatrix();
-
-	ofNoFill();
-
 	for (int i = 0; i < particleSystem.size(); i++) {
 		if (particleSystem[i].isDead()) {
 			if (particleSystem[i].type != Particle::popped) {
@@ -73,8 +59,8 @@ void ofApp::draw(){
 					particleSystem[j] = particleSystem[j + 1];
 				}
 				particleSystem.pop_back();
-			}			
-			
+			}
+
 		}
 		else {
 
@@ -83,9 +69,26 @@ void ofApp::draw(){
 				particleSystem[i].Breathe();
 			}
 
-			ofDrawSphere(particleSystem[i].x, particleSystem[i].y, particleSystem[i].z, particleSystem[i].radius);
+			
 		}
 	}
+}
+
+//--------------------------------------------------------------
+void ofApp::draw(){
+
+	ofTranslate(ofGetWidth() / (float)2, 2 * ofGetHeight() / (float)3);
+
+	ofDrawCircle(0, 0, RADIUS);
+
+	ofPushMatrix();
+
+	ofNoFill();
+
+	for (int i = 0; i < particleSystem.size(); i++) {
+		ofDrawSphere(particleSystem[i].x, particleSystem[i].y, particleSystem[i].z, particleSystem[i].radius);
+	}
+	
 	ofPopMatrix();
 	
 }
