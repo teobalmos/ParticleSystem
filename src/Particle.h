@@ -1,8 +1,12 @@
 #pragma once
 #include <cstdlib>
 #include <iostream>
+#include "ofColor.h"
 
 #define PI 3.14159265358979323846
+
+const std::vector<ofColor> predefined_colours{ {161, 255, 250}, { 178, 161, 255 }, {230, 161, 255},  
+	{255, 161, 200}, {255, 200, 161}, {161, 183, 255}, {255, 249, 161} };
 
 class Particle {
 public:
@@ -16,6 +20,7 @@ public:
 	float speed;
 	float maxHeight;
 	int breathe_modifier, rotation_modifier;
+	ofColor colour;
 
 	Particle() = default;
 
@@ -33,6 +38,8 @@ public:
 		// The rotation_modifier decides whether the bubble rotates 
 		// clockwise or counter-clockwise.
 		rotation_modifier = rand() % 2 == 0 ? -1 : 1;
+
+		colour = predefined_colours.at(rand() % predefined_colours.size());
 
 		// We give it the same characteristics as a small bubble.
 		if (bubble_type == popped) {

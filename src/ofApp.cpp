@@ -1,7 +1,7 @@
 #include "ofApp.h"
 
 #define RADIUS 100
-#define FPS 30
+#define FPS 60
 #define COUNT 10
 
 Particle ofApp::initParticle(double pop_x, double pop_y, double pop_z, double radius) {
@@ -34,6 +34,8 @@ void ofApp::initParticleSystem(int n) {
 void ofApp::setup(){
 	initParticleSystem(COUNT);
 	ofSetFrameRate(FPS);
+
+	ofSetSphereResolution(80);
 }
 
 //--------------------------------------------------------------
@@ -85,15 +87,14 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-	ofTranslate(ofGetWidth() / (float)2, 2 * ofGetHeight() / (float)3);
-
-	ofDrawCircle(0, 0, RADIUS);
+	ofTranslate(ofGetWidth() / 2.0, 2 * ofGetHeight() / 3.0);
 
 	ofPushMatrix();
 
-	ofNoFill();
+	//ofNoFill();
 
 	for (int i = 0; i < particleSystem.size(); i++) {
+		ofSetColor(particleSystem[i].colour, 80);
 		ofDrawSphere(particleSystem[i].x, particleSystem[i].y, particleSystem[i].z, particleSystem[i].radius);
 	}
 	
