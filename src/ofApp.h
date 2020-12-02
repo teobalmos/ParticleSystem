@@ -1,6 +1,7 @@
 #pragma once
 #include "ofMain.h"
 #include "Particle.h"
+#include "ofxAssimpModelLoader.h"
 
 class ofApp : public ofBaseApp{
 
@@ -28,5 +29,8 @@ class ofApp : public ofBaseApp{
 		Particle aParticle;
 		bool moving = false;
 		std::vector<Particle> particleSystem;
-		
+
+		ofEasyCam cam;
+		ofxAssimpModelLoader model;
+		ofLight light;
 };

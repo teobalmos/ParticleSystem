@@ -1,8 +1,8 @@
 #include "ofApp.h"
 
-#define RADIUS 100
+#define RADIUS 300
 #define FPS 60
-#define COUNT 10
+#define COUNT 20
 
 Particle ofApp::initParticle(double pop_x, double pop_y, double pop_z, double radius) {
 	double x, z;
@@ -36,6 +36,9 @@ void ofApp::setup(){
 	ofSetFrameRate(FPS);
 
 	ofSetSphereResolution(80);
+	model.loadModel("cauldron.obj");
+	model.setScale(1.7, 1.7, 1.7);
+	light.setPosition(1000, -5000, 1000);
 }
 
 //--------------------------------------------------------------
@@ -86,18 +89,25 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
-	ofTranslate(ofGetWidth() / 2.0, 2 * ofGetHeight() / 3.0);
+	ofEnableDepthTest();
+	ofTranslate(ofGetWidth() / 2.0, 2.0 * ofGetHeight() / 3.0);
+	
+	light.enable();
+	cam.begin();
+	cam.lookAt({ 0, 0, 0 }, {0,-1,0});
 
 	ofPushMatrix();
-
-	//ofNoFill();
+	ofSetColor(0, 0, 0, 255);
+	model.drawFaces();
 
 	for (int i = 0; i < particleSystem.size(); i++) {
 		ofSetColor(particleSystem[i].colour, 80);
 		ofDrawSphere(particleSystem[i].x, particleSystem[i].y, particleSystem[i].z, particleSystem[i].radius);
 	}
 	
+	cam.end();
+	light.disable();
+	ofDisableDepthTest();
 	ofPopMatrix();
 	
 }
