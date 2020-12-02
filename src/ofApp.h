@@ -22,7 +22,8 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 
 		void initParticleSystem(int n);
-		Particle initParticle(int pop_x = 0, int pop_y = 0, int pop_z = 0);
+		Particle initParticle(double pop_x = 0, double pop_y = 0, 
+							  double pop_z = 0, double radius = 0);
 
 		Particle aParticle;
 		bool moving = false;

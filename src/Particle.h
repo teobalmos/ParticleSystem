@@ -2,11 +2,13 @@
 #include <cstdlib>
 #include <iostream>
 
+#define PI 3.14159265358979323846
+
 class Particle {
 public:
 	enum BubbleType { small, medium, big, popped };
 
-	int x, y, z;
+	double x, y, z;
 	int init_x, init_y, init_z;
 	float radius, init_radius;
 	BubbleType type;
@@ -17,36 +19,37 @@ public:
 
 	Particle() = default;
 
-	Particle(int new_x, int new_y, int new_z, BubbleType bubble_type = small) :
+	Particle(double new_x, double new_y, double new_z, 
+		double new_radius = 0, BubbleType bubble_type = small) :
 										x(new_x), y(new_y), z(new_z), 
 										init_x(new_x), init_y(new_y), init_z(new_z)
 	{
-		theta = 0;
+		theta = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (2 * PI)));
+
+		// The breathe_modifier will change wether a bubble increases
+		// or decreases in size.
+		breathe_modifier = rand() % 2 == 0 ? -1 : 1;
+
+		// The rotation_modifier decides whether the bubble rotates 
+		// clockwise or counter-clockwise.
+		rotation_modifier = rand() % 2 == 0 ? -1 : 1;
 
 		// We give it the same characteristics as a small bubble.
 		if (bubble_type == popped) {
 			type = bubble_type;
 
-			radius = (double)(rand() % 16) + 5;
-			speed = (1 / radius) * 40;
+			radius = new_radius / 3;
+			init_radius = radius;
+			speed = 0;
 						
 			// The bubbless will go downwards for a bit.
 			maxHeight = y + 150;
-
-			// Theta will be used as time for the popped bubbles.
-			theta = 0;
 		}
 		else {
 
 			// A bubble will have the radius between 5 and 25.
 			radius = (double)(rand() % 21) + 5;
 			init_radius = radius;
-
-			// The breathe_modifier will change wether a bubble increases
-			// or decreases in size.
-			breathe_modifier = rand() % 2 == 0 ? -1 : 1;
-
-			rotation_modifier = rand() % 2 == 0 ? -1 : 1;
 
 			// The size of the bubble determines its characteristics.
 			// There are three types of bubble motions.

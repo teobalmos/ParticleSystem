@@ -1,14 +1,14 @@
 #include "ofApp.h"
 
 #define RADIUS 100
-#define FPS 45
-#define COUNT 15
+#define FPS 30
+#define COUNT 10
 
-Particle ofApp::initParticle(int pop_x, int pop_y, int pop_z) {
+Particle ofApp::initParticle(double pop_x, double pop_y, double pop_z, double radius) {
 	double x, z;
 
 	if (pop_x != 0) {
-		return Particle(pop_x, pop_y, pop_z, /*type=*/ Particle::BubbleType::popped);
+		return Particle(pop_x, pop_y, pop_z, radius, /*type=*/ Particle::BubbleType::popped);
 	}
 	else {
 		double a = ((double)rand() / (RAND_MAX)) * 2 * PI;
@@ -40,7 +40,17 @@ void ofApp::setup(){
 void ofApp::update(){
 	for (int i = 0; i < particleSystem.size(); i++) {
 		if (particleSystem[i].isDead()) {
-			if (particleSystem[i].type != Particle::popped) {
+			if (particleSystem[i].type != Particle::BubbleType::popped) {
+				float pop_chance = rand() % 10;
+				if (pop_chance >= 8) {
+					double x = particleSystem[i].x;
+					double y = particleSystem[i].y;
+					double z = particleSystem[i].z;
+					double radius = particleSystem[i].radius;
+
+					// Create the bubbles that pop from it.
+					particleSystem.push_back(initParticle(x, y, z, radius));
+				}
 				// Push all the particles to replace it.
 				for (int j = i; j < particleSystem.size() - 1; j++) {
 					particleSystem[j] = particleSystem[j + 1];
@@ -48,10 +58,6 @@ void ofApp::update(){
 
 				// Add a new particle.
 				particleSystem[particleSystem.size() - 1] = initParticle();
-
-				// Create the bubbles that pop from it.
-				particleSystem.push_back(initParticle(/*popped=*/ true));
-
 			}
 			else {
 				// If the particle is a popped bubble, just remove it without replacing it.
@@ -62,14 +68,16 @@ void ofApp::update(){
 			}
 
 		}
+		// If the particle didn't die.
 		else {
-
 			if (moving) {
 				particleSystem[i].Move(FPS);
-				particleSystem[i].Breathe();
+				// The particle breathes only if it's not a bubble that resulted
+				// from popping.
+				if (particleSystem[i].type != Particle::BubbleType::popped) {
+					particleSystem[i].Breathe();
+				}
 			}
-
-			
 		}
 	}
 }

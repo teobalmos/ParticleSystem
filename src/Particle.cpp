@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#define PI 3.14159265358979323846
 #define MEDIUM_RADIUS 40
 #define SMALL_RADIUS 10
 #define BIG_RADIUS 60
@@ -10,7 +9,10 @@
 void Particle::Move(int fps) {
 	
 	if (type == popped) {
-		
+		speed += 0.1;
+		x += cos(theta);
+		z += sin(theta);
+		y += powf(speed, 3) / 8;
 	}
 	else {
 
@@ -23,8 +25,8 @@ void Particle::Move(int fps) {
 			z1 = init_z + SMALL_RADIUS * sin(theta);
 		}
 		else if (type == medium) {
-			x1 = init_x - MEDIUM_RADIUS * cos(theta);
-			z1 = init_z - MEDIUM_RADIUS * sin(theta);
+			x1 = init_x + MEDIUM_RADIUS * cos(theta);
+			z1 = init_z + MEDIUM_RADIUS * sin(theta);
 		}
 		else {
 			x1 = init_x + BIG_RADIUS * cos(theta);
@@ -40,16 +42,22 @@ void Particle::Move(int fps) {
 }
 
 bool Particle::isDead() {
-	if (y <= maxHeight) {
-		return true;
-		std::cout << "height: " << y;
+	if (type == popped) {
+		if (y >= maxHeight) {
+			return true;
+		}
+	}
+	else {
+		if (y <= maxHeight) {
+			return true;
+		}
 	}
 	return false;
 }
 
 void Particle::Breathe() {
 
-	if ( abs(init_radius - radius) > 3) {
+	if (abs(init_radius - radius) > 3) {
 		breathe_modifier *= -1;
 	}
 
