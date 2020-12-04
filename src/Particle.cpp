@@ -6,7 +6,7 @@
 #define SMALL_RADIUS 10
 #define BIG_RADIUS 60
 
-void Particle::Move(int fps) {
+void Particle::Move() {
 	
 	if (type == popped) {
 		speed += 0.1;

@@ -26,9 +26,10 @@ class ofApp : public ofBaseApp{
 		Particle initParticle(double pop_x = 0, double pop_y = 0, 
 							  double pop_z = 0, double radius = 0);
 
-		Particle aParticle;
 		bool moving = false;
 		std::vector<Particle> particleSystem;
+		ofMaterial bubbleMat;
+		ofMaterial cauldronMat;
 
 		ofEasyCam cam;
 		ofxAssimpModelLoader model;

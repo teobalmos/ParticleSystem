@@ -2,7 +2,7 @@
 
 #define RADIUS 300
 #define FPS 60
-#define COUNT 20
+#define COUNT 60
 
 Particle ofApp::initParticle(double pop_x, double pop_y, double pop_z, double radius) {
 	double x, z;
@@ -31,18 +31,43 @@ void ofApp::initParticleSystem(int n) {
 }
 
 //--------------------------------------------------------------
-void ofApp::setup(){
+void ofApp::setup() {
 	initParticleSystem(COUNT);
 	ofSetFrameRate(FPS);
+	ofSetBackgroundColor({ 224, 196, 81 });
+	ofSetBackgroundColor({ 12, 10, 66 });
 
-	ofSetSphereResolution(80);
+	ofSetSmoothLighting(true);
+
+	ofColor lightColor = ofColor(255, 174, 168);
+	lightColor.setBrightness(0.00001);
+
+	ofSetSphereResolution(64);
+
 	model.loadModel("cauldron.obj");
-	model.setScale(1.7, 1.7, 1.7);
+	model.setScale(2, 2, 2);
+	model.setPosition(0, -30, 0);
+
+	light.setup();
+	light.enable();
+	light.setAreaLight(120, 400);
+	light.setAmbientColor({ 17, 17, 17 });
+	light.setAttenuation(1, 0.0001, 0.0001);
+	light.setDiffuseColor(lightColor);
+	light.setSpecularColor(lightColor);
 	light.setPosition(1000, -5000, 1000);
+
+	cauldronMat.setEmissiveColor(ofFloatColor(17, 17, 17, 1.0));
+	
+	cam.setUpAxis({ 0, -1, 0 });
+	cam.setPosition(-500, -200, 600);
+	cam.lookAt({ 0, -200, 0 }, { 0, -1, 0 });
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+
+
 	for (int i = 0; i < particleSystem.size(); i++) {
 		if (particleSystem[i].isDead()) {
 			if (particleSystem[i].type != Particle::BubbleType::popped) {
@@ -76,7 +101,7 @@ void ofApp::update(){
 		// If the particle didn't die.
 		else {
 			if (moving) {
-				particleSystem[i].Move(FPS);
+				particleSystem[i].Move();
 				// The particle breathes only if it's not a bubble that resulted
 				// from popping.
 				if (particleSystem[i].type != Particle::BubbleType::popped) {
@@ -90,23 +115,23 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	ofEnableDepthTest();
-	ofTranslate(ofGetWidth() / 2.0, 2.0 * ofGetHeight() / 3.0);
-	
-	light.enable();
+
 	cam.begin();
-	cam.lookAt({ 0, 0, 0 }, {0,-1,0});
 
 	ofPushMatrix();
-	ofSetColor(0, 0, 0, 255);
-	model.drawFaces();
 
 	for (int i = 0; i < particleSystem.size(); i++) {
-		ofSetColor(particleSystem[i].colour, 80);
+		bubbleMat.setEmissiveColor(ofFloatColor(particleSystem[i].colour, 0));
+		bubbleMat.begin();
 		ofDrawSphere(particleSystem[i].x, particleSystem[i].y, particleSystem[i].z, particleSystem[i].radius);
+		bubbleMat.end();
 	}
+
+	cauldronMat.begin();
+	model.drawFaces();
+	cauldronMat.end();
 	
 	cam.end();
-	light.disable();
 	ofDisableDepthTest();
 	ofPopMatrix();
 	
@@ -115,7 +140,7 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	switch (key) {
-	case(32): setup(); moving = false; break;
+	case(32): initParticleSystem(COUNT); moving = false; break;
 	case('0'): moving = !moving; break;
 	}
 }

@@ -82,7 +82,7 @@ public:
 
 	~Particle() = default;
 
-	void Move(int fps);
+	void Move();
 	bool isDead();
 	void Breathe();
 };
