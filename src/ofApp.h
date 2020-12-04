@@ -2,6 +2,7 @@
 #include "ofMain.h"
 #include "Particle.h"
 #include "ofxAssimpModelLoader.h"
+#include "ofxGui.h"
 
 class ofApp : public ofBaseApp{
 
@@ -25,6 +26,7 @@ class ofApp : public ofBaseApp{
 		void initParticleSystem(int n);
 		Particle initParticle(double pop_x = 0, double pop_y = 0, 
 							  double pop_z = 0, double radius = 0);
+		float timeIncrease;
 
 		bool moving = false;
 		std::vector<Particle> particleSystem;

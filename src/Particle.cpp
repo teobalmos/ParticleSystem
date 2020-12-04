@@ -6,13 +6,13 @@
 #define SMALL_RADIUS 10
 #define BIG_RADIUS 60
 
-void Particle::Move() {
+void Particle::Move(float timeIncrease) {
 	
 	if (type == popped) {
 		speed += 0.1;
 		x += cos(theta);
 		z += sin(theta);
-		y += powf(speed, 3) / 8;
+		y += (powf(speed, 3) / 8) + timeIncrease;
 	}
 	else {
 
@@ -33,9 +33,9 @@ void Particle::Move() {
 			z1 = init_z + BIG_RADIUS * sin(theta);
 		}
 
-		x = x1;
-		y -= speed;
-		z = z1;
+		x = x1 + timeIncrease;
+		y -= (speed + timeIncrease);
+		z = z1 + timeIncrease;
 
 		theta += omega;
 	}
@@ -43,7 +43,7 @@ void Particle::Move() {
 
 bool Particle::isDead() {
 	if (type == popped) {
-		if (y >= maxHeight) {
+		if (y >= maxHeight || y > 10) {
 			return true;
 		}
 	}
@@ -57,9 +57,9 @@ bool Particle::isDead() {
 
 void Particle::Breathe() {
 
-	if (abs(init_radius - radius) > 3) {
+	if (abs(init_radius - radius) > 4) {
 		breathe_modifier *= -1;
 	}
 
-	radius += 0.2 * breathe_modifier;
+	radius += 0.1 * breathe_modifier;
 }

@@ -1,8 +1,12 @@
+#pragma once
+
 #include "ofApp.h"
 
 #define RADIUS 300
 #define FPS 60
 #define COUNT 60
+
+extern float timeIncrease;
 
 Particle ofApp::initParticle(double pop_x, double pop_y, double pop_z, double radius) {
 	double x, z;
@@ -62,6 +66,8 @@ void ofApp::setup() {
 	cam.setUpAxis({ 0, -1, 0 });
 	cam.setPosition(-500, -200, 600);
 	cam.lookAt({ 0, -200, 0 }, { 0, -1, 0 });
+
+	timeIncrease = 0;
 }
 
 //--------------------------------------------------------------
@@ -101,7 +107,7 @@ void ofApp::update(){
 		// If the particle didn't die.
 		else {
 			if (moving) {
-				particleSystem[i].Move();
+				particleSystem[i].Move(timeIncrease * ofGetLastFrameTime());
 				// The particle breathes only if it's not a bubble that resulted
 				// from popping.
 				if (particleSystem[i].type != Particle::BubbleType::popped) {
@@ -130,19 +136,31 @@ void ofApp::draw(){
 	cauldronMat.begin();
 	model.drawFaces();
 	cauldronMat.end();
-	
+
 	cam.end();
 	ofDisableDepthTest();
-	ofPopMatrix();
-	
+	ofPopMatrix();	
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	switch (key) {
-	case(32): initParticleSystem(COUNT); moving = false; break;
+	case(32): 
+		initParticleSystem(COUNT); 
+		moving = false; 
+		timeIncrease = 0;
+		break;
 	case('0'): moving = !moving; break;
+	case('t'): 
+		timeIncrease += 10;
+		break;
+	case('T'):
+		if (timeIncrease > 10) {
+			timeIncrease -= 10;
+		}
+		break;
 	}
+	
 }
 
 //--------------------------------------------------------------

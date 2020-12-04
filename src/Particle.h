@@ -12,8 +12,8 @@ class Particle {
 public:
 	enum BubbleType { small, medium, big, popped };
 
-	double x, y, z;
-	int init_x, init_y, init_z;
+	float x, y, z;
+	float init_x, init_y, init_z;
 	float radius, init_radius;
 	BubbleType type;
 	float theta;
@@ -76,13 +76,13 @@ public:
 				type = big;
 				speed = (1 / radius) * 32;
 			}
-			maxHeight = -(1 / radius) * 2400;
+			maxHeight = -(1 / radius) * 3000;
 		}
 	}
 
 	~Particle() = default;
 
-	void Move();
+	void Move(float timeIncrease);
 	bool isDead();
 	void Breathe();
 };
