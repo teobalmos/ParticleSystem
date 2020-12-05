@@ -86,6 +86,15 @@ void ofApp::update(){
 
 					// Create the bubbles that pop from it.
 					particleSystem.push_back(initParticle(x, y, z, radius));
+
+					// Bigger bubbles can divide in more smaller bubbles.
+					if (particleSystem[i].type == Particle::BubbleType::big) {
+						// Up to two more bubbles can be added as popped bubbles.
+						int moreBubbles = rand() % 3;
+						for (int i = 0; i <= moreBubbles; i++) {
+							particleSystem.push_back(initParticle(x, y, z, radius));
+						}
+					}
 				}
 				// Push all the particles to replace it.
 				for (int j = i; j < particleSystem.size() - 1; j++) {
