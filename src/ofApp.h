@@ -26,7 +26,10 @@ class ofApp : public ofBaseApp{
 		void initParticleSystem(int n);
 		Particle initParticle(double pop_x = 0, double pop_y = 0, 
 							  double pop_z = 0, double radius = 0);
-		float timeIncrease;
+		float timeIncrease = 0;
+		float sizeIncrease = 0;
+		enum DrawColour{normal, black, green, pink} drawColour = normal;
+		ofFloatColor colour = { 0, 0, 0 };
 
 		bool moving = false;
 		std::vector<Particle> particleSystem;
