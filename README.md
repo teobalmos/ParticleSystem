@@ -11,3 +11,5 @@
 `t` - increase the speed of the simulation  
 `T` - decrease the speed of the simulation  
 `mouse movement` - rotate the scene
+  
+![Bubbles Screenshot](Bubbles.png)
